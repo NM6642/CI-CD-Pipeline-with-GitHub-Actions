@@ -33,5 +33,5 @@ jobs:
 
     - name: Push Docker image to DockerHub
       run: |
-        docker tag flask-app ${{ secrets.DOCKER_USERNAME }}/flask-app
-        docker push ${{ secrets.DOCKER_USERNAME }}/flask-app
+        docker tag flask-app m2023/flask-app
+        docker push m2023/flask-app
