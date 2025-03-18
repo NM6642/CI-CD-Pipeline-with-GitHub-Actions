@@ -1,4 +1,4 @@
-# CI/CD Pipeline with GitHub Actions and Docker
+# CI/CD Pipeline with GitHub Actions 
 
 This project demonstrates how to automate the **Continuous Integration (CI)** and **Continuous Deployment (CD)** processes using **GitHub Actions** and **Docker**. The application is a simple **Flask** web app that gets containerized and deployed using Docker. The CI/CD pipeline builds the Docker image and pushes it to **DockerHub** automatically every time you push new changes to the `main` branch.
 
