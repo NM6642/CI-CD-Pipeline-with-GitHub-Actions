@@ -34,6 +34,13 @@ Create a **requirements.txt** to list the dependencies:
 
 Build and run the Docker image locally.
 
+### 5. Set Up GitHub Actions for CI/CD
+1. Create a repository on GitHub and push your project code there.
+2. Set up GitHub Actions:
+   - Create a `.github/workflows` folder and add a workflow file (`ci-cd.yml`).
+   - Define a CI/CD pipeline that triggers on `push` events to the `main` branch.
+   - The workflow installs dependencies, builds the Docker image, and optionally pushes it to DockerHub.
+
 ## How the CI/CD Pipeline Works
 
 The CI/CD pipeline is defined using **GitHub Actions** in the `.github/workflows/ci-cd.yml` file. Here’s what happens:
@@ -56,6 +63,11 @@ The CI/CD pipeline is defined using **GitHub Actions** in the `.github/workflows
 
 ### 4. Run the Docker Image Locally (Optional)
    You can pull the Docker image from DockerHub and run it locally to verify the application is working.
+   
+   ## What Does This Project Do?
+- **Automation**: It automates building and deploying a Flask app using GitHub Actions, a widely used CI/CD tool.
+- **Dockerization**: The app is containerized with Docker to ensure consistency across different environments.
+- **CI/CD Pipeline**: It sets up a GitHub Actions pipeline that builds the app, runs tests (optional), and deploys the Docker image to DockerHub automatically when code changes are pushed to the `main` branch.
 
 ## Deployment (Optional)
 
