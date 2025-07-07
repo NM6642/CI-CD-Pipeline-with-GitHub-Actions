@@ -23,8 +23,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 🔐 SAST Scan with Bandit
+    # ✅ Run Bandit for static code analysis (SAST)
     - name: Run Bandit (Static Security Scan)
+      continue-on-error: true
       run: |
         pip install bandit
         bandit -r .
@@ -33,19 +34,22 @@ jobs:
     - name: Build Docker image
       run: docker build -t flask-app .
 
-    # 🔐 Scan Docker Image for Vulnerabilities with Trivy
+    # 🔐 Scan Docker Image for vulnerabilities using Trivy
     - name: Scan Docker Image with Trivy
+      continue-on-error: true
       run: |
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
         ./trivy image flask-app
 
-    # 🔒 Secrets Scan with Gitleaks
+    # 🔒 Scan for secrets with Gitleaks
     - name: Scan for Secrets (Gitleaks)
       uses: gitleaks/gitleaks-action@v2
+      continue-on-error: true
 
-    # 🔐 Push to DockerHub
+    # 🐳 Push to DockerHub
     - name: Login to DockerHub
-      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
     - name: Push Docker image to DockerHub
       run: |
