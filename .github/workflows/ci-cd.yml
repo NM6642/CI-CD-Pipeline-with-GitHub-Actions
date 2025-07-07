@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Secure CI/CD Pipeline
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-secure:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,13 +23,29 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Build Docker image
+    # 🔐 SAST Scan with Bandit
+    - name: Run Bandit (Static Security Scan)
       run: |
-        docker build -t flask-app .
+        pip install bandit
+        bandit -r .
 
-    - name: Login to DockerHub
+    # 🐳 Build Docker Image
+    - name: Build Docker image
+      run: docker build -t flask-app .
+
+    # 🔐 Scan Docker Image for Vulnerabilities with Trivy
+    - name: Scan Docker Image with Trivy
       run: |
-        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+        ./trivy image flask-app
+
+    # 🔒 Secrets Scan with Gitleaks
+    - name: Scan for Secrets (Gitleaks)
+      uses: gitleaks/gitleaks-action@v2
+
+    # 🔐 Push to DockerHub
+    - name: Login to DockerHub
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
     - name: Push Docker image to DockerHub
       run: |
